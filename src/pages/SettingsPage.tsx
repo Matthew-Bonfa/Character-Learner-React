@@ -4,78 +4,149 @@ import { useGlobalContext } from "../components/GlobalProvider";
 import SettingsSwapper from "../components/SettingsSwapper";
 
 const SettingsContainer = styled.section`
-    display: flex;
-    flex-direction: column;
     position: fixed;
-    top: 5em;
-    right: min(5em, 10%);
-    width: 18em;
-    height: 23em;
-    border-radius: 1em;
-    color: ${({ theme }) => theme.color.text};
+    top: 4.5rem; /* Below navbar */
+    right: 1rem;
+    width: 20rem;
+    max-width: 90%;
+    margin: 0 auto;
     background-color: ${({ theme }) => theme.color.first};
-    box-shadow: 0 0.35rem 1rem ${({ theme }) => theme.shadow.third[80]};
-    z-index: 3;
-`
+    color: ${({ theme }) => theme.color.text};
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
 
-const ToggleSettingsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 10%;
-`
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
 
-const SwapperLabel = styled.div`
+const SettingsTitle = styled.h2`
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: ${({ theme }) => theme.color.text};
+    font-size: 1.5rem;
+`;
+
+const SettingsSection = styled.div`
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid ${({ theme }) => theme.color.third};
+
+    &:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+`;
+
+const SettingsLabel = styled.label`
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: ${({ theme }) => theme.color.text};
+    font-size: 1rem;
+`;
+
+const SettingsCloseButton = styled.button`
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: ${({ theme }) => theme.color.text};
+    cursor: pointer;
+    width: 2.5rem;
+    height: 2.5rem;
     display: flex;
-    width: 100%;
-    font-size: 1.1rem;
+    align-items: center;
     justify-content: center;
-    margin-top: 10%;
-`
+    border-radius: 50%;
+
+    &:hover {
+        background-color: ${({ theme }) => theme.color.third};
+    }
+`;
 
 function SettingsPage() {
     const {
         userSettings: { darkMode, forceKanji, enableRomaji, displayMode, writeMode },
-        globalFunctions: { toggleDarkMode, toggleForceKanji, toggleEnableRomaji, updateDisplayMode, updateWriteMode }
+        globalFunctions: {
+            toggleDarkMode,
+            toggleForceKanji,
+            toggleEnableRomaji,
+            updateDisplayMode,
+            updateWriteMode,
+            setSettingsMode
+        }
     } = useGlobalContext();
 
+    // Close settings when clicking outside the panel
+    const handleOutsideClick = (event: MouseEvent) => {
+        if (event.target === event.currentTarget) {
+            setSettingsMode(false);
+        }
+    };
+
     return (
-        <SettingsContainer>
-            <ToggleSettingsContainer>
-                <SettingsToggle
-                    message={"dark mode"}
-                    toggle={darkMode}
-                    toggleFunc={toggleDarkMode}
-                />
+        <div onClick={handleOutsideClick} style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 999
+        }}>
+            <SettingsContainer onClick={(e) => e.stopPropagation()}>
+                <SettingsCloseButton onClick={() => setSettingsMode(false)}>×</SettingsCloseButton>
+                <SettingsTitle>Settings</SettingsTitle>
 
-                <SettingsToggle
-                    message={"force Kanji"}
-                    toggle={forceKanji}
-                    toggleFunc={toggleForceKanji}
-                />
+                <SettingsSection>
+                    <SettingsLabel>Appearance</SettingsLabel>
+                    <SettingsToggle
+                        message="Dark Mode"
+                        toggle={darkMode}
+                        toggleFunc={toggleDarkMode}
+                    />
+                    <SettingsToggle
+                        message="Force Kanji Display"
+                        toggle={forceKanji}
+                        toggleFunc={toggleForceKanji}
+                    />
+                    <SettingsToggle
+                        message="Enable Typed Romaji"
+                        toggle={enableRomaji}
+                        toggleFunc={toggleEnableRomaji}
+                    />
+                </SettingsSection>
 
-                <SettingsToggle
-                    message={"enable typed Romaji"}
-                    toggle={enableRomaji}
-                    toggleFunc={toggleEnableRomaji}
-                />
-            </ToggleSettingsContainer>
-
-            <SwapperLabel>Display Mode</SwapperLabel>
-
-            <SettingsSwapper
-                mode={displayMode}
-                updateMode={updateDisplayMode}
-            />
-
-            <SwapperLabel>Writing Mode</SwapperLabel>
-
-            <SettingsSwapper
-                mode={writeMode}
-                updateMode={updateWriteMode}
-            />
-
-        </SettingsContainer>
+                <SettingsSection>
+                    <SettingsLabel>Display Preferences</SettingsLabel>
+                    <SettingsSwapper
+                        mode={displayMode}
+                        updateMode={updateDisplayMode}
+                    />
+                    <SettingsSwapper
+                        mode={writeMode}
+                        updateMode={updateWriteMode}
+                    />
+                </SettingsSection>
+            </SettingsContainer>
+        </div>
     )
 }
 

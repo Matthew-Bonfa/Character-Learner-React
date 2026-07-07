@@ -10,20 +10,20 @@ const ToggleContainer = styled.div`
     height: 2em;
     margin-bottom: 1%;
     margin-left: 5%;
-`
+`;
 
 const SwitchContainer = styled.div`
     margin: 0 2%;
-`
+`;
 
 const ToggleLabel = styled.label`
     margin-left: 2%;
-`
+`;
 
 interface ToggleProps {
     message: string
     toggle: boolean
-    toggleFunc: (toggle: boolean) => void
+    toggleFunc: () => void
 }
 
 function SettingsToggle({ message, toggle, toggleFunc }: ToggleProps) {
@@ -32,7 +32,7 @@ function SettingsToggle({ message, toggle, toggleFunc }: ToggleProps) {
             <SwitchContainer>
                 <Switch
                     checked={toggle}
-                    onClick={() => toggleFunc(toggle)}
+                    onClick={toggleFunc}
                 />
             </SwitchContainer>
             <ToggleLabel>{message}</ToggleLabel>

@@ -1,6 +1,5 @@
-import { createContext, ReactNode, useContext, useEffect, useReducer, useState } from "react"
+import { createContext, ReactNode, useContext, useEffect, useReducer, useState, useCallback } from "react"
 import { darkTheme, lightTheme } from "../constants";
-import { useToggleState } from "../utils";
 import { ThemeProvider } from "styled-components";
 declare module 'react-transition-group';
 
@@ -29,10 +28,11 @@ export interface SettingsType {
 }
 
 interface SettingsFunctions {
-    toggleSettings: (settingsMode: boolean) => void;
-    toggleDarkMode: (darkMode: boolean) => void;
-    toggleForceKanji: (forceKanji: boolean) => void;
-    toggleEnableRomaji: (enableKanji: boolean) => void;
+    toggleSettings: () => void;
+    setSettingsMode: (value: boolean) => void;
+    toggleDarkMode: () => void;
+    toggleForceKanji: () => void;
+    toggleEnableRomaji: () => void;
     updateDisplayMode: (displayMode: "Kanji" | "Kana" | "English") => void;
     updateWriteMode: (writeMode: "Kanji" | "Kana" | "English") => void;
     updateOrderMode: (orderMode: "Random" | "Shuffle") => void;
@@ -82,13 +82,22 @@ const userContentReducer = (state: ContentType[], action: Action): ContentType[]
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
 
 function GlobalProvider({ children }: { children: ReactNode }) {
-    const [settingsMode, toggleSettings] = useToggleState(false);
-    const [darkMode, toggleDarkMode] = useToggleState(true);
-    const [forceKanji, toggleForceKanji] = useToggleState(false);
-    const [enableRomaji, toggleEnableRomaji] = useToggleState(false);
-    const [displayMode, updateDisplayMode] = useState<"Kanji" | "Kana" | "English">("Kanji");
-    const [writeMode, updateWriteMode] = useState<"Kanji" | "Kana" | "English">("English");
-    const [orderMode, updateOrderMode] = useState<"Random" | "Shuffle">("Shuffle");
+    const [settingsMode, setSettingsMode] = useState(false);
+    const toggleSettings = useCallback(() => setSettingsMode(prev => !prev), []);
+    const [darkMode, setDarkMode] = useState(true);
+    const toggleDarkMode = useCallback(() => setDarkMode(prev => !prev), []);
+    const [forceKanji, setForceKanji] = useState(false);
+    const toggleForceKanji = useCallback(() => setForceKanji(prev => !prev), []);
+    const [enableRomaji, setEnableRomaji] = useState(false);
+    const toggleEnableRomaji = useCallback(() => setEnableRomaji(prev => !prev), []);
+    const [displayMode, setDisplayMode] = useState<"Kanji" | "Kana" | "English">("Kanji");
+    const [writeMode, setWriteMode] = useState<"Kanji" | "Kana" | "English">("English");
+    const [orderMode, setOrderMode] = useState<"Random" | "Shuffle">("Shuffle");
+
+    // Settings update functions
+    const updateDisplayMode = useCallback((displayMode: "Kanji" | "Kana" | "English") => setDisplayMode(displayMode), []);
+    const updateWriteMode = useCallback((writeMode: "Kanji" | "Kana" | "English") => setWriteMode(writeMode), []);
+    const updateOrderMode = useCallback((orderMode: "Random" | "Shuffle") => setOrderMode(orderMode), []);
 
     const [userContent, contentDispatch] = useReducer(userContentReducer, []);
 
@@ -132,6 +141,7 @@ function GlobalProvider({ children }: { children: ReactNode }) {
                         sortContent,
                         updateContent,
                         toggleSettings,
+                        setSettingsMode,
                         toggleDarkMode,
                         toggleForceKanji,
                         toggleEnableRomaji,

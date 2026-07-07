@@ -18,7 +18,7 @@ const CircleButton = styled.button <{ color: string, animation?: string, text?: 
     margin: clamp(10px, 2%, 20px);
     margin-left: 0;
     transition: all 0.2s ease-in-out;
-  
+
     &:hover {
         transform: ${({ animation }) => animation || ""};
         background-color: ${({ text }) => (text ? "transparent" : ({ theme }) => theme.shadow.text[30])};
@@ -47,7 +47,7 @@ const ButtonText = styled.span<{ animation?: string }>`
         background-color: ${({ theme }) => theme.shadow.text[30]};
         cursor: pointer;
     }
-`
+`;
 
 interface NavButtonProps {
     id: "profile" | "content" | "settings";
@@ -78,7 +78,7 @@ const NavButton: React.FC<NavButtonProps> = ({ id, svg, text, color, animation }
 
         }
         else if (id == "settings") {
-            toggleSettings(settingsMode);
+            toggleSettings();
         }
         else if (id == "content") {
             setCurrentPage(id);

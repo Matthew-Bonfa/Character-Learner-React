@@ -5,6 +5,7 @@ import profileIcon from "../assets/profile-icon.svg?react";
 import cogIcon from "../assets/cog-icon.svg?react";
 import { useContext, useEffect } from "react";
 import { PageContext } from "../App";
+import { useGlobalContext } from "./GlobalProvider";
 
 const NavContainer = styled.div`
     position: absolute;
@@ -26,13 +27,18 @@ function NavBar() {
         document.documentElement.style.setProperty("--first-color", theme.color.first);
         document.documentElement.style.setProperty("--second-color", theme.color.second);
         document.documentElement.style.setProperty("--third-color", theme.color.third);
-    }, []);
+    }, [theme]);
 
     const pageContext = useContext(PageContext);
     if (!pageContext) {
         throw new Error("404");
     }
-    const { currentPage } = pageContext;
+    const { currentPage, setCurrentPage } = pageContext;
+
+    const {
+        userSettings: { settingsMode },
+        globalFunctions: { toggleSettings }
+    } = useGlobalContext();
 
     return (
         <NavContainer>

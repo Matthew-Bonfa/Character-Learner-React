@@ -31,11 +31,11 @@ export const darkTheme = {
 
 export const lightTheme = {
     color: {
-        text: "#000000de",
-        first: "#c1c1c1",
-        second: "#dbdbdb",
-        third: "#ededed",
-        accent: "#966fd6",
+        text: "#1a1a1a", // Improved from "#000000de" for better readability
+        first: "#8a8a8a", // Improved from "#c1c1c1" for better contrast
+        second: "#cccccc", // Improved from "#dbdbdb" for better definition
+        third: "#e0e0e0", // Improved from "#ededed" for better depth
+        accent: "#8a63d9", // Slightly refined purple for better visual appeal
     },
     shadow: {
         text: {
@@ -45,10 +45,10 @@ export const lightTheme = {
             30: "#0000004d"
         },
         third: {
-            80: "#edededcc",
+            80: "#e0e0e0cc",
         },
         accent: {
-            70: "#966fd6b3",
+            70: "#8a63d9b3",
         }
     }
 }
@@ -139,7 +139,7 @@ export const animationVariants = {
     }
 }
 
-//temp 
+//temp
 /*
 export const tempUserContent: ContentType[] = [
     {
@@ -228,4 +228,4 @@ export const tempPopularContent: ContentType[] = [
         selected: false,
         liked: false
     }];
-    */
+*/
