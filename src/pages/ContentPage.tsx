@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import ContentSections from "../components/ContentSections";
 import { PageType } from "../constants";
-import React, { useEffect } from "react";
-import { parseCSV, useToggleState } from "../utils";
+import React from "react";
+import { parseCSV } from "../utils";
 import { ContentType, useGlobalContext } from "../components/GlobalProvider";
 
 const ContentContainer = styled.div`

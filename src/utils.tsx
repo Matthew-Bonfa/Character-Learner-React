@@ -1,6 +1,5 @@
 import { useCallback, useState } from "react";
 import Papa from "papaparse";
-import { ContentType, useGlobalContext } from "./components/GlobalProvider";
 import { csvFormat } from "./constants";
 import { toRomaji } from "wanakana";
 

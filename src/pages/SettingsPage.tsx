@@ -92,7 +92,7 @@ function SettingsPage() {
   } = useGlobalContext();
 
   // Close settings when clicking outside the panel
-  const handleOutsideClick = (event: MouseEvent) => {
+  const handleOutsideClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.target === event.currentTarget) {
       setSettingsMode(false);
     }

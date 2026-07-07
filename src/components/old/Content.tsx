@@ -1,10 +1,10 @@
 import styled from "styled-components"
 import "../index.css"
-import { darkColor3 } from "../../constants"
+import { darkColor4 } from "../../constants"
 
 const ContentButton = styled.button`
     border: none;
-    background-color: ${darkColor3};
+    background-color: ${darkColor4};
     left: clamp(10px, 2%, 20px);
     font-size: 100%;
     line-height: 0;

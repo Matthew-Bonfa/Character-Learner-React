@@ -66,7 +66,6 @@ const NavButton: React.FC<NavButtonProps> = ({ id, svg, text, color, animation }
   const { currentPage, setCurrentPage } = pageContext;
 
   const {
-    userSettings: { settingsMode },
     globalFunctions: { toggleSettings }
   } = useGlobalContext();
 

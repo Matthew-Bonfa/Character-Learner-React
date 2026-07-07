@@ -46,7 +46,6 @@ interface ContentSectionProps extends ContentType {
 
 function ContentObject({ section, name, content, selected, liked }: ContentSectionProps) {
   const {
-    userContent,
     globalFunctions: {
       updateContent,
       removeContent,
