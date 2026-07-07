@@ -41,68 +41,68 @@ const Title = styled.h1`
 `
 
 interface ContentSectionProps extends ContentType {
-    section: string
+  section: string
 }
 
 function ContentObject({ section, name, content, selected, liked }: ContentSectionProps) {
-    const {
-        userContent,
-        globalFunctions: {
-            updateContent,
-            removeContent,
-        }
-    } = useGlobalContext();
+  const {
+    userContent,
+    globalFunctions: {
+      updateContent,
+      removeContent,
+    }
+  } = useGlobalContext();
 
-    const handleDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.stopPropagation();
-        removeContent(name);
-    };
+  const handleDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    removeContent(name);
+  };
 
-    const handleFavourite = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.stopPropagation();
-        updateContent({
-            name: name,
-            content: content,
-            selected: selected,
-            liked: !liked,
-        });
-    };
+  const handleFavourite = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    updateContent({
+      name: name,
+      content: content,
+      selected: selected,
+      liked: !liked,
+    });
+  };
 
-    const handleSelect = (event: React.MouseEvent<HTMLDivElement>) => {
-        event.stopPropagation();
-        updateContent({
-            name: name,
-            content: content,
-            selected: !selected,
-            liked: liked,
-        });
-    };
+  const handleSelect = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    updateContent({
+      name: name,
+      content: content,
+      selected: !selected,
+      liked: liked,
+    });
+  };
 
-    return (
-        <ObjectContainer
-            selected={selected}
-            onClick={handleSelect}
-        >
-            <Title>
-                {name}
-            </Title>
-            <ObjectButtonContainer>
-                {section === "MY CONTENT" && (
-                    <ContentObjectButton
-                        SVG={binIcon}
-                        type="delete"
-                        onClick={handleDelete}
-                    />
-                )}
-                <ContentObjectButton
-                    SVG={thumbIcon}
-                    type="favourite"
-                    onClick={handleFavourite}
-                    liked={liked}
-                />
-            </ObjectButtonContainer>
-        </ObjectContainer>
-    )
+  return (
+    <ObjectContainer
+      selected={selected}
+      onClick={handleSelect}
+    >
+      <Title>
+        {name}
+      </Title>
+      <ObjectButtonContainer>
+        {section === "MY CONTENT" && (
+          <ContentObjectButton
+            SVG={binIcon}
+            type="delete"
+            onClick={handleDelete}
+          />
+        )}
+        <ContentObjectButton
+          SVG={thumbIcon}
+          type="favourite"
+          onClick={handleFavourite}
+          liked={liked}
+        />
+      </ObjectButtonContainer>
+    </ObjectContainer>
+  )
 }
 
 export default ContentObject;

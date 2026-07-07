@@ -21,26 +21,26 @@ const CircleButton = styled.button`
 `
 
 interface ContentObjectButtonProps {
-    SVG?: React.FC<React.SVGProps<SVGSVGElement>>
-    type: "delete" | "favourite"
-    onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    liked?: boolean
+  SVG?: React.FC<React.SVGProps<SVGSVGElement>>
+  type: "delete" | "favourite"
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  liked?: boolean
 }
 
 const ContentObjectButton: React.FC<ContentObjectButtonProps> = ({ SVG, type, onClick, liked }: ContentObjectButtonProps) => {
-    const theme = useTheme();
+  const theme = useTheme();
 
-    return (
-        <CircleButton
-            onClick={onClick}
-        >
-            <SVGComponent
-                SVG={SVG}
-                color={liked ? "yellow" : theme.color.text}
-                animation={type === "favourite" ? "translateY(0.5em) translateX(-0.2em) rotate(15deg)" : ""}
-            />
-        </CircleButton>
-    )
+  return (
+    <CircleButton
+      onClick={onClick}
+    >
+      <SVGComponent
+        SVG={SVG}
+        color={liked ? "yellow" : theme.color.text}
+        animation={type === "favourite" ? "translateY(0.5em) translateX(-0.2em) rotate(15deg)" : ""}
+      />
+    </CircleButton>
+  )
 }
 
 export default ContentObjectButton

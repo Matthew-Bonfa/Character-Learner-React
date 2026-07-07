@@ -74,33 +74,33 @@ const MessageButton = styled.button`
 `
 
 interface AlertMessageProps {
-    title: string
-    message: string
-    onConfirm?: () => void
+  title: string
+  message: string
+  onConfirm?: () => void
 }
 
 function AlertMessage({ title, message, onConfirm }: AlertMessageProps) {
-    return (
-        <MessageBackground>
-            <MessageContainer>
-                <section>
-                    <MessageTitle>{title}</MessageTitle>
+  return (
+    <MessageBackground>
+      <MessageContainer>
+        <section>
+          <MessageTitle>{title}</MessageTitle>
 
-                    <MessageBody>{message}</MessageBody>
+          <MessageBody>{message}</MessageBody>
 
-                    <ButtonContainer>
-                        <MessageButton
-                            onClick={onConfirm}
-                        >
-                            CONFIRM
-                        </MessageButton>
+          <ButtonContainer>
+            <MessageButton
+              onClick={onConfirm}
+            >
+              CONFIRM
+            </MessageButton>
 
-                        <MessageButton>CANCEL</MessageButton>
-                    </ButtonContainer>
-                </section>
-            </MessageContainer>
-        </MessageBackground>
-    )
+            <MessageButton>CANCEL</MessageButton>
+          </ButtonContainer>
+        </section>
+      </MessageContainer>
+    </MessageBackground>
+  )
 }
 
 export default AlertMessage;

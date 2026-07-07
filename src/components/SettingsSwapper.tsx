@@ -10,35 +10,35 @@ const SwapperContainer = styled.div`
 `
 
 interface SettingsSwapperProps {
-    mode: "Kanji" | "Kana" | "English"
-    updateMode: (mode: "Kanji" | "Kana" | "English") => void
+  mode: "Kanji" | "Kana" | "English"
+  updateMode: (mode: "Kanji" | "Kana" | "English") => void
 }
 
 function SettingsSwapper({ mode, updateMode }: SettingsSwapperProps) {
-    return (
-        <SwapperContainer>
-            <SwapperButton
-                id={"Kanji"}
-                edge={"left"}
-                mode={mode}
-                updateMode={updateMode}
-            />
+  return (
+    <SwapperContainer>
+      <SwapperButton
+        id={"Kanji"}
+        edge={"left"}
+        mode={mode}
+        updateMode={updateMode}
+      />
 
-            <SwapperButton
-                id={"Kana"}
-                edge={"middle"}
-                mode={mode}
-                updateMode={updateMode}
-            />
+      <SwapperButton
+        id={"Kana"}
+        edge={"middle"}
+        mode={mode}
+        updateMode={updateMode}
+      />
 
-            <SwapperButton
-                id={"English"}
-                edge={"right"}
-                mode={mode}
-                updateMode={updateMode}
-            />
-        </SwapperContainer>
-    )
+      <SwapperButton
+        id={"English"}
+        edge={"right"}
+        mode={mode}
+        updateMode={updateMode}
+      />
+    </SwapperContainer>
+  )
 }
 
 export default SettingsSwapper;

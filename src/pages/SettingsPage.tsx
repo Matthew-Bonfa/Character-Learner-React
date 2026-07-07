@@ -79,75 +79,75 @@ const SettingsCloseButton = styled.button`
 `;
 
 function SettingsPage() {
-    const {
-        userSettings: { darkMode, forceKanji, enableRomaji, displayMode, writeMode },
-        globalFunctions: {
-            toggleDarkMode,
-            toggleForceKanji,
-            toggleEnableRomaji,
-            updateDisplayMode,
-            updateWriteMode,
-            setSettingsMode
-        }
-    } = useGlobalContext();
+  const {
+    userSettings: { darkMode, forceKanji, enableRomaji, displayMode, writeMode },
+    globalFunctions: {
+      toggleDarkMode,
+      toggleForceKanji,
+      toggleEnableRomaji,
+      updateDisplayMode,
+      updateWriteMode,
+      setSettingsMode
+    }
+  } = useGlobalContext();
 
-    // Close settings when clicking outside the panel
-    const handleOutsideClick = (event: MouseEvent) => {
-        if (event.target === event.currentTarget) {
-            setSettingsMode(false);
-        }
-    };
+  // Close settings when clicking outside the panel
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      setSettingsMode(false);
+    }
+  };
 
-    return (
-        <div onClick={handleOutsideClick} style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 999
-        }}>
-            <SettingsContainer onClick={(e) => e.stopPropagation()}>
-                <SettingsCloseButton onClick={() => setSettingsMode(false)}>×</SettingsCloseButton>
-                <SettingsTitle>Settings</SettingsTitle>
+  return (
+    <div onClick={handleOutsideClick} style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100vw',
+      height: '100vh',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 999
+    }}>
+      <SettingsContainer onClick={(e) => e.stopPropagation()}>
+        <SettingsCloseButton onClick={() => setSettingsMode(false)}>×</SettingsCloseButton>
+        <SettingsTitle>Settings</SettingsTitle>
 
-                <SettingsSection>
-                    <SettingsLabel>Appearance</SettingsLabel>
-                    <SettingsToggle
-                        message="Dark Mode"
-                        toggle={darkMode}
-                        toggleFunc={toggleDarkMode}
-                    />
-                    <SettingsToggle
-                        message="Force Kanji Display"
-                        toggle={forceKanji}
-                        toggleFunc={toggleForceKanji}
-                    />
-                    <SettingsToggle
-                        message="Enable Typed Romaji"
-                        toggle={enableRomaji}
-                        toggleFunc={toggleEnableRomaji}
-                    />
-                </SettingsSection>
+        <SettingsSection>
+          <SettingsLabel>Appearance</SettingsLabel>
+          <SettingsToggle
+            message="Dark Mode"
+            toggle={darkMode}
+            toggleFunc={toggleDarkMode}
+          />
+          <SettingsToggle
+            message="Force Kanji Display"
+            toggle={forceKanji}
+            toggleFunc={toggleForceKanji}
+          />
+          <SettingsToggle
+            message="Enable Typed Romaji"
+            toggle={enableRomaji}
+            toggleFunc={toggleEnableRomaji}
+          />
+        </SettingsSection>
 
-                <SettingsSection>
-                    <SettingsLabel>Display Preferences</SettingsLabel>
-                    <SettingsSwapper
-                        mode={displayMode}
-                        updateMode={updateDisplayMode}
-                    />
-                    <SettingsSwapper
-                        mode={writeMode}
-                        updateMode={updateWriteMode}
-                    />
-                </SettingsSection>
-            </SettingsContainer>
-        </div>
-    )
+        <SettingsSection>
+          <SettingsLabel>Display Preferences</SettingsLabel>
+          <SettingsSwapper
+            mode={displayMode}
+            updateMode={updateDisplayMode}
+          />
+          <SettingsSwapper
+            mode={writeMode}
+            updateMode={updateWriteMode}
+          />
+        </SettingsSection>
+      </SettingsContainer>
+    </div>
+  )
 }
 
 export default SettingsPage;

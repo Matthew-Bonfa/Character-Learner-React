@@ -7,14 +7,14 @@ const Button = styled.div<{ id: "Kanji" | "Kana" | "English", edge: string, mode
     justify-content: center;    
     align-items: center;
     border-radius :${({ edge }) => {
-        if (edge === "left") {
-            return "99px 0% 0% 99px";
-        } else if (edge === "right") {
-            return "0% 99px 99px 0%";
-        } else {
-            return "0";
-        }
-    }};
+    if (edge === "left") {
+      return "99px 0% 0% 99px";
+    } else if (edge === "right") {
+      return "0% 99px 99px 0%";
+    } else {
+      return "0";
+    }
+  }};
     aspect-ratio: 24/9;
     background-color: ${({ id, mode, theme }) => id === mode ? theme.color.accent : theme.color.second};
     transition: all 0.2s ease-in-out;
@@ -36,30 +36,30 @@ const Button = styled.div<{ id: "Kanji" | "Kana" | "English", edge: string, mode
 `
 
 interface SwapperButtonProps {
-    id: "Kanji" | "Kana" | "English"
-    edge: "left" | "middle" | "right"
-    mode: "Kanji" | "Kana" | "English"
-    updateMode: (mode: "Kanji" | "Kana" | "English") => void
+  id: "Kanji" | "Kana" | "English"
+  edge: "left" | "middle" | "right"
+  mode: "Kanji" | "Kana" | "English"
+  updateMode: (mode: "Kanji" | "Kana" | "English") => void
 }
 
 function SwapperButton({ id, edge, mode, updateMode }: SwapperButtonProps) {
-    const handleOnClick = () => {
-        if (mode === id) {
-            return;
-        }
-        updateMode(id);
+  const handleOnClick = () => {
+    if (mode === id) {
+      return;
     }
+    updateMode(id);
+  }
 
-    return (
-        <Button
-            id={id}
-            edge={edge}
-            mode={mode}
-            onClick={handleOnClick}
-        >
-            <span>{id}</span>
-        </Button>
-    )
+  return (
+    <Button
+      id={id}
+      edge={edge}
+      mode={mode}
+      onClick={handleOnClick}
+    >
+      <span>{id}</span>
+    </Button>
+  )
 }
 
 export default SwapperButton;

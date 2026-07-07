@@ -20,47 +20,47 @@ const NavContainer = styled.div`
 `
 
 function NavBar() {
-    const theme = useTheme();
+  const theme = useTheme();
 
-    useEffect(() => {
-        document.documentElement.style.setProperty("--texxt-color", theme.color.text);
-        document.documentElement.style.setProperty("--first-color", theme.color.first);
-        document.documentElement.style.setProperty("--second-color", theme.color.second);
-        document.documentElement.style.setProperty("--third-color", theme.color.third);
-    }, [theme]);
+  useEffect(() => {
+    document.documentElement.style.setProperty("--texxt-color", theme.color.text);
+    document.documentElement.style.setProperty("--first-color", theme.color.first);
+    document.documentElement.style.setProperty("--second-color", theme.color.second);
+    document.documentElement.style.setProperty("--third-color", theme.color.third);
+  }, [theme]);
 
-    const pageContext = useContext(PageContext);
-    if (!pageContext) {
-        throw new Error("404");
-    }
-    const { currentPage, setCurrentPage } = pageContext;
+  const pageContext = useContext(PageContext);
+  if (!pageContext) {
+    throw new Error("404");
+  }
+  const { currentPage, setCurrentPage } = pageContext;
 
-    const {
-        userSettings: { settingsMode },
-        globalFunctions: { toggleSettings }
-    } = useGlobalContext();
+  const {
+    userSettings: { settingsMode },
+    globalFunctions: { toggleSettings }
+  } = useGlobalContext();
 
-    return (
-        <NavContainer>
-            <NavButton
-                id="profile"
-                svg={profileIcon}
-                color={theme.color.text}
-            />
-            <NavButton
-                id="settings"
-                svg={cogIcon}
-                color={theme.color.text}
-                animation={"rotate(90deg)"}
-            />
-            <NavButton
-                id="content"
-                text={currentPage === "content" ? "RETURN" : "CONTENT"}
-                color={theme.color.text}
-            />
-            <Logo />
-        </NavContainer>
-    )
+  return (
+    <NavContainer>
+      <NavButton
+        id="profile"
+        svg={profileIcon}
+        color={theme.color.text}
+      />
+      <NavButton
+        id="settings"
+        svg={cogIcon}
+        color={theme.color.text}
+        animation={"rotate(90deg)"}
+      />
+      <NavButton
+        id="content"
+        text={currentPage === "content" ? "RETURN" : "CONTENT"}
+        color={theme.color.text}
+      />
+      <Logo />
+    </NavContainer>
+  )
 }
 
 export default NavBar;

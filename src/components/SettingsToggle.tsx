@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Switch from '@mui/material/Switch';
-import { SettingsType } from "./GlobalProvider";
 
 const ToggleContainer = styled.div`
     display: flex;
@@ -21,23 +20,23 @@ const ToggleLabel = styled.label`
 `;
 
 interface ToggleProps {
-    message: string
-    toggle: boolean
-    toggleFunc: () => void
+  message: string
+  toggle: boolean
+  toggleFunc: () => void
 }
 
 function SettingsToggle({ message, toggle, toggleFunc }: ToggleProps) {
-    return (
-        <ToggleContainer>
-            <SwitchContainer>
-                <Switch
-                    checked={toggle}
-                    onClick={toggleFunc}
-                />
-            </SwitchContainer>
-            <ToggleLabel>{message}</ToggleLabel>
-        </ToggleContainer>
-    )
+  return (
+    <ToggleContainer>
+      <SwitchContainer>
+        <Switch
+          checked={toggle}
+          onClick={toggleFunc}
+        />
+      </SwitchContainer>
+      <ToggleLabel>{message}</ToggleLabel>
+    </ToggleContainer>
+  )
 }
 
 export default SettingsToggle;

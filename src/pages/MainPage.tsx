@@ -27,140 +27,139 @@ const Answer = styled.h2`
 `;
 
 function MainPage() {
-	const {
-		userContent,
-		userSettings: { enableRomaji, writeMode, orderMode },
-	} = useGlobalContext();
+  const {
+    userContent,
+    userSettings: { enableRomaji, writeMode, orderMode },
+  } = useGlobalContext();
 
-	const [index, setIndex] = useState<number | undefined>(undefined);
-	const [sessionIndexes, setSessionIndexes] = useState<number[]>([]);
-	const [inputValue, setInputValue] = useState<string | undefined>(undefined);
-	const [showAnswer, toggleShowAnswer] = useToggleState(false);
-	const [triggerAnimation, setTriggerAnimation] = useState<
-		"left" | "right" | null
-	>(null);
+  const [index, setIndex] = useState<number | undefined>(undefined);
+  const [sessionIndexes, setSessionIndexes] = useState<number[]>([]);
+  const [inputValue, setInputValue] = useState<string | undefined>(undefined);
+  const [showAnswer, toggleShowAnswer] = useToggleState(false);
+  const [triggerAnimation, setTriggerAnimation] = useState<
+    "left" | "right" | null
+  >(null);
 
-	const sessionContent = useMemo(() => {
-		return userContent.reduce((acc: any[], content: any) => {
-			if (content.selected) {
-				return acc.concat(content.content);
-			}
-			return acc;
-		}, []);
-	}, [userContent]);
+  const sessionContent = useMemo(() => {
+    return userContent.reduce((acc: any[], content: any) => {
+      if (content.selected) {
+        return acc.concat(content.content);
+      }
+      return acc;
+    }, []);
+  }, [userContent]);
 
-	// initialize first index(es)
-	useEffect(() => {
-		if (sessionContent.length > 0 && index === undefined) {
-			if (orderMode === "Random") {
-				const firstNum = generateNum(undefined, sessionContent.length);
-				const secondNum = generateNum(firstNum, sessionContent.length);
-				setSessionIndexes([firstNum, secondNum]);
-				setIndex(0);
-			} else if (orderMode === "Shuffle") {
-				const allIndexes = Array.from(
-					{ length: sessionContent.length },
-					(_, i) => i
-				);
-				// get first two from shuffled sequence
-				const firstNum = generateNum(allIndexes);
-				const secondNum = generateNum(allIndexes);
-				setSessionIndexes([firstNum, secondNum]);
-				setIndex(0);
-			}
-		}
-	}, [orderMode, sessionContent.length]);
+  // initialize first index(es)
+  useEffect(() => {
+    if (sessionContent.length > 0 && index === undefined) {
+      if (orderMode === "Random") {
+        const firstNum = generateNum(undefined, sessionContent.length);
+        const secondNum = generateNum(firstNum, sessionContent.length);
+        setSessionIndexes([firstNum, secondNum]);
+        setIndex(0);
+      } else if (orderMode === "Shuffle") {
+        const allIndexes = Array.from(
+          { length: sessionContent.length },
+          (_, i) => i
+        );
+        // get first two from shuffled sequence
+        const firstNum = generateNum(allIndexes);
+        const secondNum = generateNum(allIndexes);
+        setSessionIndexes([firstNum, secondNum]);
+        setIndex(0);
+      }
+    }
+  }, [orderMode, sessionContent.length]);
 
-	// validate user input
-	useEffect(() => {
-		if (index !== undefined) {
-			const answerRaw = String(
-				sessionContent[sessionIndexes[index]][
-					(writeMode === "Kana" || writeMode === "Kanji") && enableRomaji
-						? "Romaji"
-						: writeMode
-				]
-			);
+  // validate user input
+  useEffect(() => {
+    if (index !== undefined) {
+      const answerRaw = String(
+        sessionContent[sessionIndexes[index]][
+        (writeMode === "Kana" || writeMode === "Kanji") && enableRomaji
+          ? "Romaji"
+          : writeMode
+        ]
+      );
 
-			const cleanText = (text: string) =>
-				text
-					.replace(/\(.*?\)|\[.*?\]|\{.*?\}|<.*?>/g, "")
-					.replace(/[^\p{L}\p{N}\s]/gu, "")
-					.replace(/\s+/g, " ")
-					.trim()
-					.toLowerCase();
+      const cleanText = (text: string) =>
+        text
+          .replace(/\(.*?\)|\[.*?\]|\{.*?\}|<.*?>/g, "")
+          .replace(/[^\p{L}\p{N}\s]/gu, "")
+          .replace(/\s+/g, " ")
+          .trim()
+          .toLowerCase();
 
-			const validAnswers = answerRaw
-				.split(";")
-				.map((w: string) => cleanText(w));
-			const userInputClean = cleanText(String(inputValue));
+      const validAnswers = answerRaw
+        .split(";")
+        .map((w: string) => cleanText(w));
+      const userInputClean = cleanText(String(inputValue));
 
-			if (validAnswers.includes(userInputClean)) {
-				setInputValue("");
-				setTriggerAnimation("right");
-			}
-		}
-	}, [inputValue]);
+      if (validAnswers.includes(userInputClean)) {
+        setInputValue("");
+        setTriggerAnimation("right");
+      }
+    }
+  }, [inputValue]);
 
-	const handleAnimationComplete = () => {
-		if (index !== undefined) {
-			if (triggerAnimation === "right") {
-				const nextIndex = index + 1;
+  const handleAnimationComplete = () => {
+    if (index !== undefined) {
+      if (triggerAnimation === "right") {
+        const nextIndex = index + 1;
 
-				if (orderMode === "Random") {
-					const nextNum = generateNum(
-						sessionIndexes[index + 1] ?? sessionIndexes[index],
-						sessionContent.length
-					);
-					setSessionIndexes([...sessionIndexes, nextNum]);
-				} else if (orderMode === "Shuffle") {
-					const allIndexes = Array.from(
-						{ length: sessionContent.length },
-						(_, i) => i
-					);
-					const nextNum = generateNum(allIndexes);
-					setSessionIndexes([...sessionIndexes, nextNum]);
-				}
+        if (orderMode === "Random") {
+          const nextNum = generateNum(
+            sessionIndexes[index + 1] ?? sessionIndexes[index],
+            sessionContent.length
+          );
+          setSessionIndexes([...sessionIndexes, nextNum]);
+        } else if (orderMode === "Shuffle") {
+          const allIndexes = Array.from(
+            { length: sessionContent.length },
+            (_, i) => i
+          );
+          const nextNum = generateNum(allIndexes);
+          setSessionIndexes([...sessionIndexes, nextNum]);
+        }
 
-				setIndex(nextIndex);
-				setTriggerAnimation(null);
-			} else if (triggerAnimation === "left") {
-				if (index === 0) return;
-				setIndex(index - 1);
-				setTriggerAnimation(null);
-			}
-		}
-	};
+        setIndex(nextIndex);
+        setTriggerAnimation(null);
+      } else if (triggerAnimation === "left") {
+        if (index === 0) return;
+        setIndex(index - 1);
+        setTriggerAnimation(null);
+      }
+    }
+  };
 
-	return (
-		<MainContainer>
-			{sessionContent.length > 0 && index !== undefined && (
-				<>
-					<Question
-						content={sessionContent}
-						index={index}
-						sessionIndexes={sessionIndexes}
-						triggerAnimation={triggerAnimation}
-						setTriggerAnimation={setTriggerAnimation}
-						onAnimationComplete={handleAnimationComplete}
-					/>
-					<Answer>
-						{showAnswer && index !== undefined
-							? `${sessionContent[sessionIndexes[index]].English}  ${
-									sessionContent[sessionIndexes[index]].Kana
-							  }`
-							: ""}
-					</Answer>
-					<TextInput
-						inputValue={inputValue}
-						setInputValue={setInputValue}
-						showAnswer={showAnswer}
-						toggleShowAnswer={toggleShowAnswer}
-					/>
-				</>
-			)}
-		</MainContainer>
-	);
+  return (
+    <MainContainer>
+      {sessionContent.length > 0 && index !== undefined && (
+        <>
+          <Question
+            content={sessionContent}
+            index={index}
+            sessionIndexes={sessionIndexes}
+            triggerAnimation={triggerAnimation}
+            setTriggerAnimation={setTriggerAnimation}
+            onAnimationComplete={handleAnimationComplete}
+          />
+          <Answer>
+            {showAnswer && index !== undefined
+              ? `${sessionContent[sessionIndexes[index]].English}  ${sessionContent[sessionIndexes[index]].Kana
+              }`
+              : ""}
+          </Answer>
+          <TextInput
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            showAnswer={showAnswer}
+            toggleShowAnswer={toggleShowAnswer}
+          />
+        </>
+      )}
+    </MainContainer>
+  );
 }
 
 export default MainPage;

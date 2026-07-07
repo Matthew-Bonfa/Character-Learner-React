@@ -42,29 +42,29 @@ const ArrowSVG = styled.svg`
 `
 
 interface ArrowProps {
-    direction: "left" | "right";
-    onClick: (direction: "left" | "right") => void;
-    isArrowVisible: boolean;
+  direction: "left" | "right";
+  onClick: (direction: "left" | "right") => void;
+  isArrowVisible: boolean;
 }
 
 function Arrow({ direction, onClick, isArrowVisible }: ArrowProps) {
-    return (
-        <ArrowButton
-            direction={direction}
-            onClick={() => onClick(direction)}
-        >
-            {isArrowVisible && (
-                direction === "left" ? (
-                    <ArrowSVG
-                        as={leftArrowIcon}
-                    />) : (
-                    <ArrowSVG
-                        as={rightArrowIcon}
-                    />
-                )
-            )}
-        </ArrowButton>
-    )
+  return (
+    <ArrowButton
+      direction={direction}
+      onClick={() => onClick(direction)}
+    >
+      {isArrowVisible && (
+        direction === "left" ? (
+          <ArrowSVG
+            as={leftArrowIcon}
+          />) : (
+          <ArrowSVG
+            as={rightArrowIcon}
+          />
+        )
+      )}
+    </ArrowButton>
+  )
 }
 
 export default Arrow

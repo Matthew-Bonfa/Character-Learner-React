@@ -8,33 +8,33 @@ import SettingsPage from "./SettingsPage";
 import { PageContext } from "../App";
 
 function PageContainer() {
-    const [currentPage, setCurrentPage] = useState<PageType>("main");
+  const [currentPage, setCurrentPage] = useState<PageType>("main");
 
-    const pages = {
-        main: <MainPage />,
-        content: <ContentPage setCurrentPage={setCurrentPage} />,
-        popularContent: <></>,
-    }
+  const pages = {
+    main: <MainPage />,
+    content: <ContentPage setCurrentPage={setCurrentPage} />,
+    popularContent: <></>,
+  }
 
-    const {
-        userSettings: { settingsMode }
-    } = useGlobalContext();
+  const {
+    userSettings: { settingsMode }
+  } = useGlobalContext();
 
-    return (
-        <>
-            <PageContext.Provider
-                value={{ currentPage, setCurrentPage }}
-            >
-                <NavBar />
-            </PageContext.Provider>
-            <section>
-                {pages[currentPage]}
-            </section>
-            {settingsMode && (
-                <SettingsPage></SettingsPage>
-            )}
-        </>
-    )
+  return (
+    <>
+      <PageContext.Provider
+        value={{ currentPage, setCurrentPage }}
+      >
+        <NavBar />
+      </PageContext.Provider>
+      <section>
+        {pages[currentPage]}
+      </section>
+      {settingsMode && (
+        <SettingsPage></SettingsPage>
+      )}
+    </>
+  )
 }
 
 export default PageContainer;

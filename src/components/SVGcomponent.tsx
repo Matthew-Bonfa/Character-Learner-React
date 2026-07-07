@@ -17,19 +17,19 @@ const IconSVG = styled.svg<{ color?: string, animation?: string }>`
 `
 
 interface SVGComponentProps {
-    SVG?: React.FC<React.SVGProps<SVGSVGElement>>;
-    color?: string
-    animation?: string
+  SVG?: React.FC<React.SVGProps<SVGSVGElement>>;
+  color?: string
+  animation?: string
 }
 
 const SVGComponent: React.FC<SVGComponentProps> = ({ SVG, color, animation }: SVGComponentProps) => {
-    return (
-        <IconSVG
-            as={SVG}
-            color={color}
-            animation={animation}
-        />
-    )
+  return (
+    <IconSVG
+      as={SVG}
+      color={color}
+      animation={animation}
+    />
+  )
 }
 
 export default SVGComponent;

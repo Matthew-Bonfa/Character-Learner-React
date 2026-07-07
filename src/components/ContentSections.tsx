@@ -43,48 +43,48 @@ const ContentBody = styled.div`
 `;
 
 interface ContentProps {
-    name: string;
-    onClick?: () => void;
-    sectionContent: ContentType[];
+  name: string;
+  onClick?: () => void;
+  sectionContent: ContentType[];
 }
 
 function ContentSections({ name, onClick, sectionContent }: ContentProps) {
-    const nodeRefs = useRef(new Map<string, React.RefObject<HTMLDivElement | null>>());
+  const nodeRefs = useRef(new Map<string, React.RefObject<HTMLDivElement | null>>());
 
-    return (
-        <SectionContainer>
-            <SectionTitle onClick={onClick}>{name}</SectionTitle>
-            <ContentBody>
-                <TransitionGroup component={null}>
-                    {sectionContent.map((object) => {
-                        if (!nodeRefs.current.has(object.name)) {
-                            nodeRefs.current.set(object.name, React.createRef<HTMLDivElement>());
-                        }
-                        const nodeRef = nodeRefs.current.get(object.name)!;
+  return (
+    <SectionContainer>
+      <SectionTitle onClick={onClick}>{name}</SectionTitle>
+      <ContentBody>
+        <TransitionGroup component={null}>
+          {sectionContent.map((object) => {
+            if (!nodeRefs.current.has(object.name)) {
+              nodeRefs.current.set(object.name, React.createRef<HTMLDivElement>());
+            }
+            const nodeRef = nodeRefs.current.get(object.name)!;
 
-                        return (
-                            <CSSTransition
-                                key={object.name}
-                                nodeRef={nodeRef}
-                                timeout={100}
-                                classNames="content-object"
-                            >
-                                <div ref={nodeRef}>
-                                    <ContentObject
-                                        section={name}
-                                        name={object.name}
-                                        content={object.content}
-                                        selected={object.selected}
-                                        liked={object.liked}
-                                    />
-                                </div>
-                            </CSSTransition>
-                        );
-                    })}
-                </TransitionGroup>
-            </ContentBody>
-        </SectionContainer>
-    );
+            return (
+              <CSSTransition
+                key={object.name}
+                nodeRef={nodeRef}
+                timeout={100}
+                classNames="content-object"
+              >
+                <div ref={nodeRef}>
+                  <ContentObject
+                    section={name}
+                    name={object.name}
+                    content={object.content}
+                    selected={object.selected}
+                    liked={object.liked}
+                  />
+                </div>
+              </CSSTransition>
+            );
+          })}
+        </TransitionGroup>
+      </ContentBody>
+    </SectionContainer>
+  );
 }
 
 export default ContentSections;

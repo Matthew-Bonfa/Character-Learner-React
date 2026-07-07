@@ -26,9 +26,9 @@ const LogoButton = styled.button`
 `
 
 function Logo() {
-    return (
-        <LogoButton>TK</LogoButton>
-    )
+  return (
+    <LogoButton>TK</LogoButton>
+  )
 }
 
 export default Logo

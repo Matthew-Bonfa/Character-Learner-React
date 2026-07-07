@@ -50,62 +50,62 @@ const ButtonText = styled.span<{ animation?: string }>`
 `;
 
 interface NavButtonProps {
-    id: "profile" | "content" | "settings";
-    svg?: React.FC<React.SVGProps<SVGSVGElement>>;
-    text?: string;
-    color: string;
-    animation?: string;
+  id: "profile" | "content" | "settings";
+  svg?: React.FC<React.SVGProps<SVGSVGElement>>;
+  text?: string;
+  color: string;
+  animation?: string;
 }
 
 const NavButton: React.FC<NavButtonProps> = ({ id, svg, text, color, animation }: NavButtonProps) => {
-    const pageContext = useContext(PageContext);
-    if (!pageContext) {
-        throw new Error("404");
+  const pageContext = useContext(PageContext);
+  if (!pageContext) {
+    throw new Error("404");
+  }
+
+  const { currentPage, setCurrentPage } = pageContext;
+
+  const {
+    userSettings: { settingsMode },
+    globalFunctions: { toggleSettings }
+  } = useGlobalContext();
+
+  const handleNavButtonClick = () => {
+    if (id === currentPage) {
+      setCurrentPage("main");
     }
+    else if (id === "profile") {
 
-    const { currentPage, setCurrentPage } = pageContext;
-
-    const {
-        userSettings: { settingsMode },
-        globalFunctions: { toggleSettings }
-    } = useGlobalContext();
-
-    const handleNavButtonClick = () => {
-        if (id === currentPage) {
-            setCurrentPage("main");
-        }
-        else if (id === "profile") {
-
-        }
-        else if (id == "settings") {
-            toggleSettings();
-        }
-        else if (id == "content") {
-            setCurrentPage(id);
-        }
     }
+    else if (id == "settings") {
+      toggleSettings();
+    }
+    else if (id == "content") {
+      setCurrentPage(id);
+    }
+  }
 
-    return (
-        <CircleButton
-            color={color}
-            animation={animation}
-            text={text}
-            onClick={handleNavButtonClick}
+  return (
+    <CircleButton
+      color={color}
+      animation={animation}
+      text={text}
+      onClick={handleNavButtonClick}
+    >
+      {svg ? (
+        <SVGComponent
+          SVG={svg}
+          color={color}
+        />
+      ) : (
+        <ButtonText
+          animation={animation}
         >
-            {svg ? (
-                <SVGComponent
-                    SVG={svg}
-                    color={color}
-                />
-            ) : (
-                <ButtonText
-                    animation={animation}
-                >
-                    {text}
-                </ButtonText>
-            )}
-        </CircleButton>
-    )
+          {text}
+        </ButtonText>
+      )}
+    </CircleButton>
+  )
 }
 
 export default NavButton

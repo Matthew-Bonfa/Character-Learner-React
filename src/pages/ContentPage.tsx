@@ -62,74 +62,74 @@ const HiddenFileInput = styled.input.attrs({ type: "file" })`
 `
 
 interface ContentProps {
-    setCurrentPage: (currentPage: PageType) => void;
+  setCurrentPage: (currentPage: PageType) => void;
 }
 
 function ContentPage({ setCurrentPage }: ContentProps) {
-    const {
-        userContent,
-        globalFunctions: {
-            addContent,
-            sortContent
-        }
-    } = useGlobalContext();
+  const {
+    userContent,
+    globalFunctions: {
+      addContent,
+      sortContent
+    }
+  } = useGlobalContext();
 
-    const handleAddFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-        if (!files || files.length === 0) {
-            return;
-        }
+  const handleAddFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) {
+      return;
+    }
 
-        for (let file of files) {
-            try {
-                const parsed = await parseCSV(file);
-                addContent({
-                    name: file.name.slice(0, -4),
-                    content: parsed,
-                    selected: false,
-                    liked: false
-                });
-            }
-            catch (error) {
-                console.error(error);
-            }
-        }
-        sortContent((a: ContentType, b: ContentType) => a.name.localeCompare(b.name));
-    };
+    for (let file of files) {
+      try {
+        const parsed = await parseCSV(file);
+        addContent({
+          name: file.name.slice(0, -4),
+          content: parsed,
+          selected: false,
+          liked: false
+        });
+      }
+      catch (error) {
+        console.error(error);
+      }
+    }
+    sortContent((a: ContentType, b: ContentType) => a.name.localeCompare(b.name));
+  };
 
-    return (
-        <ContentContainer>
-            <FileInputContainer>
-                <label
-                    htmlFor="file-upload"
-                >
-                    <span>
-                        +
-                    </span>
-                </label>
-                <HiddenFileInput
-                    id="file-upload"
-                    accept=".csv"
-                    multiple
-                    onChange={handleAddFile}
-                />
-            </FileInputContainer>
+  return (
+    <ContentContainer>
+      <FileInputContainer>
+        <label
+          htmlFor="file-upload"
+        >
+          <span>
+            +
+          </span>
+        </label>
+        <HiddenFileInput
+          id="file-upload"
+          accept=".csv"
+          multiple
+          onChange={handleAddFile}
+        />
+      </FileInputContainer>
 
-            <ContentSections
-                name="FAVOURITES"
-                sectionContent={userContent.filter(content => content.liked === true)}
-            />
-            <ContentSections
-                name="MY CONTENT"
-                sectionContent={userContent}
-            />
-            <ContentSections
-                name="POPULAR CONTENT"
-                onClick={() => setCurrentPage("popularContent")}
-                sectionContent={[]}
-            />
-        </ContentContainer>
-    )
+      <ContentSections
+        name="FAVOURITES"
+        sectionContent={userContent.filter(content => content.liked === true)}
+      />
+      <ContentSections
+        name="MY CONTENT"
+        sectionContent={userContent}
+      />
+      <ContentSections
+        name="POPULAR CONTENT"
+        onClick={() => setCurrentPage("popularContent")}
+        sectionContent={[]}
+      />
+    </ContentContainer>
+  )
 }
 
 export default ContentPage;

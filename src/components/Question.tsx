@@ -54,148 +54,148 @@ const QuestionContainer = styled(motion.div)`
 `;
 
 interface QuestionProps {
-	content: any[];
-	index: number | undefined;
-	sessionIndexes: number[];
-	triggerAnimation: "left" | "right" | null;
-	setTriggerAnimation: (triggerAnimation: "left" | "right" | null) => void;
-	onAnimationComplete: () => void;
+  content: any[];
+  index: number | undefined;
+  sessionIndexes: number[];
+  triggerAnimation: "left" | "right" | null;
+  setTriggerAnimation: (triggerAnimation: "left" | "right" | null) => void;
+  onAnimationComplete: () => void;
 }
 
 function Question({
-	content,
-	index,
-	sessionIndexes,
-	triggerAnimation,
-	setTriggerAnimation,
-	onAnimationComplete,
+  content,
+  index,
+  sessionIndexes,
+  triggerAnimation,
+  setTriggerAnimation,
+  onAnimationComplete,
 }: QuestionProps) {
-	const [isCardVisible, toggleIsCardVisible] = useToggleState(false);
-	const [animationDirection, setAnimationDirection] = useState<
-		"left" | "right"
-	>("left");
-	const [bottomCardText, setBottomCardText] = useState<string>("");
-	const [topCardText, setTopCardText] = useState<string>("");
-	const [drawArrows, setDrawArrows] = useState<boolean>(
-		window.innerWidth > 768
-	);
+  const [isCardVisible, toggleIsCardVisible] = useToggleState(false);
+  const [animationDirection, setAnimationDirection] = useState<
+    "left" | "right"
+  >("left");
+  const [bottomCardText, setBottomCardText] = useState<string>("");
+  const [topCardText, setTopCardText] = useState<string>("");
+  const [drawArrows, setDrawArrows] = useState<boolean>(
+    window.innerWidth > 768
+  );
 
-	const [topSubText, setTopSubText] = useState<string>("");
-	const [bottomSubText, setBottomSubText] = useState<string>("");
+  const [topSubText, setTopSubText] = useState<string>("");
+  const [bottomSubText, setBottomSubText] = useState<string>("");
 
-	useEffect(() => {
-		const handleResize = () => {
-			setDrawArrows(window.innerWidth > 768);
-		};
-		handleResize();
-		window.addEventListener("resize", handleResize);
-		return () => window.removeEventListener("resize", handleResize);
-	}, []);
+  useEffect(() => {
+    const handleResize = () => {
+      setDrawArrows(window.innerWidth > 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-	const {
-		userSettings: { displayMode },
-	} = useGlobalContext();
+  const {
+    userSettings: { displayMode },
+  } = useGlobalContext();
 
-	const startAnimation = useCallback(
-		(direction: "left" | "right") => {
-			if (isCardVisible) return;
-			if (index !== undefined) {
-				if (direction === "right") {
-					setTopCardText(content[sessionIndexes[index]][displayMode]);
-					setTopSubText(content[sessionIndexes[index]]["Kanji"]);
-					setBottomCardText(content[sessionIndexes[index + 1]][displayMode]);
-					setBottomSubText(content[sessionIndexes[index + 1]]["Kanji"]);
-				} else if (direction === "left") {
-					if (index === 0) return;
-					setTopCardText(content[sessionIndexes[index - 1]][displayMode]);
-					setTopSubText(content[sessionIndexes[index - 1]]["Kanji"]);
-					setBottomCardText(content[sessionIndexes[index]][displayMode]);
-					setBottomSubText(content[sessionIndexes[index]]["Kanji"]);
-				}
-			}
-			setAnimationDirection(direction);
-			toggleIsCardVisible();
-		},
-		[index]
-	);
+  const startAnimation = useCallback(
+    (direction: "left" | "right") => {
+      if (isCardVisible) return;
+      if (index !== undefined) {
+        if (direction === "right") {
+          setTopCardText(content[sessionIndexes[index]][displayMode]);
+          setTopSubText(content[sessionIndexes[index]]["Kanji"]);
+          setBottomCardText(content[sessionIndexes[index + 1]][displayMode]);
+          setBottomSubText(content[sessionIndexes[index + 1]]["Kanji"]);
+        } else if (direction === "left") {
+          if (index === 0) return;
+          setTopCardText(content[sessionIndexes[index - 1]][displayMode]);
+          setTopSubText(content[sessionIndexes[index - 1]]["Kanji"]);
+          setBottomCardText(content[sessionIndexes[index]][displayMode]);
+          setBottomSubText(content[sessionIndexes[index]]["Kanji"]);
+        }
+      }
+      setAnimationDirection(direction);
+      toggleIsCardVisible();
+    },
+    [index]
+  );
 
-	useEffect(() => {
-		if (triggerAnimation === null) return;
-		startAnimation(triggerAnimation);
-	}, [triggerAnimation]);
+  useEffect(() => {
+    if (triggerAnimation === null) return;
+    startAnimation(triggerAnimation);
+  }, [triggerAnimation]);
 
-	useEffect(() => {
-		if (index !== undefined) {
-			setTopCardText(content[sessionIndexes[index]][displayMode]);
-			setTopSubText(content[sessionIndexes[index]]["Kanji"]);
-		} else {
-			setTopCardText("");
-			setTopSubText("");
-		}
-	}, [displayMode]);
+  useEffect(() => {
+    if (index !== undefined) {
+      setTopCardText(content[sessionIndexes[index]][displayMode]);
+      setTopSubText(content[sessionIndexes[index]]["Kanji"]);
+    } else {
+      setTopCardText("");
+      setTopSubText("");
+    }
+  }, [displayMode]);
 
-	return (
-		<CardContainer>
-			<Arrow
-				direction="left"
-				onClick={() => setTriggerAnimation("left")}
-				isArrowVisible={drawArrows}
-			/>
+  return (
+    <CardContainer>
+      <Arrow
+        direction="left"
+        onClick={() => setTriggerAnimation("left")}
+        isArrowVisible={drawArrows}
+      />
 
-			<QuestionContainer
-				variants={animationVariants}
-				initial={"static"}
-				animate={
-					isCardVisible
-						? animationDirection === "left"
-							? ["left", "bounce"]
-							: "right"
-						: "static"
-				}
-				style={{ zIndex: 2 }}
-				onAnimationComplete={() => {
-					if (isCardVisible) {
-						const animationDuration = animationDirection === "left" ? 0 : 300;
-						setTimeout(() => {
-							if (animationDirection === "right") {
-								if (index !== undefined) {
-									setTopCardText(
-										content[sessionIndexes[index + 1]][displayMode]
-									);
-									setTopSubText(content[sessionIndexes[index + 1]]["Kanji"]);
-								} else {
-									setTopCardText("");
-									setTopSubText("");
-								}
-							}
-							toggleIsCardVisible();
-							onAnimationComplete();
-						}, animationDuration);
-					}
-				}}
-				onAnimationStart={() => { }}
-			>
-				<h1 className="question-text">{topCardText}</h1>
-				{displayMode === "Kana" && <h1>{topSubText}</h1>}
-			</QuestionContainer>
+      <QuestionContainer
+        variants={animationVariants}
+        initial={"static"}
+        animate={
+          isCardVisible
+            ? animationDirection === "left"
+              ? ["left", "bounce"]
+              : "right"
+            : "static"
+        }
+        style={{ zIndex: 2 }}
+        onAnimationComplete={() => {
+          if (isCardVisible) {
+            const animationDuration = animationDirection === "left" ? 0 : 300;
+            setTimeout(() => {
+              if (animationDirection === "right") {
+                if (index !== undefined) {
+                  setTopCardText(
+                    content[sessionIndexes[index + 1]][displayMode]
+                  );
+                  setTopSubText(content[sessionIndexes[index + 1]]["Kanji"]);
+                } else {
+                  setTopCardText("");
+                  setTopSubText("");
+                }
+              }
+              toggleIsCardVisible();
+              onAnimationComplete();
+            }, animationDuration);
+          }
+        }}
+        onAnimationStart={() => { }}
+      >
+        <h1 className="question-text">{topCardText}</h1>
+        {displayMode === "Kana" && <h1>{topSubText}</h1>}
+      </QuestionContainer>
 
-			{isCardVisible && (
-				<QuestionContainer
-					variants={animationVariants}
-					animate={animationDirection === "left" ? "shrink" : "rise"}
-				>
-					<h1 className="question-text">{bottomCardText}</h1>
-					{displayMode === "Kana" && <h1>{bottomSubText}</h1>}
-				</QuestionContainer>
-			)}
+      {isCardVisible && (
+        <QuestionContainer
+          variants={animationVariants}
+          animate={animationDirection === "left" ? "shrink" : "rise"}
+        >
+          <h1 className="question-text">{bottomCardText}</h1>
+          {displayMode === "Kana" && <h1>{bottomSubText}</h1>}
+        </QuestionContainer>
+      )}
 
-			<Arrow
-				direction="right"
-				onClick={() => setTriggerAnimation("right")}
-				isArrowVisible={drawArrows}
-			/>
-		</CardContainer>
-	);
+      <Arrow
+        direction="right"
+        onClick={() => setTriggerAnimation("right")}
+        isArrowVisible={drawArrows}
+      />
+    </CardContainer>
+  );
 }
 
 export default Question;
