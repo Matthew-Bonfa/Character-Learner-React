@@ -1,6 +1,9 @@
 import { createContext, ReactNode, useContext, useEffect, useReducer, useState, useCallback } from "react"
 import { darkTheme, lightTheme } from "../constants";
 import { ThemeProvider } from "styled-components";
+import Papa from "papaparse";
+import { toRomaji } from "wanakana";
+import wordsCSV from "../../files/Words.csv?raw";
 declare module 'react-transition-group';
 
 export interface ContentType {
@@ -51,7 +54,8 @@ type Action =
   | { type: "ADD_CONTENT"; payload: ContentType }
   | { type: "REMOVE_CONTENT"; payload: string }
   | { type: "SORT_CONTENT"; payload: (a: ContentType, b: ContentType) => number }
-  | { type: "UPDATE_CONTENT"; payload: ContentType };
+  | { type: "UPDATE_CONTENT"; payload: ContentType }
+  | { type: "LOAD_CONTENT"; payload: ContentType[] };
 
 const userContentReducer = (state: ContentType[], action: Action): ContentType[] => {
   switch (action.type) {
@@ -72,9 +76,37 @@ const userContentReducer = (state: ContentType[], action: Action): ContentType[]
         content.name === action.payload.name ? { ...content, ...action.payload } : content
       );
 
+    case "LOAD_CONTENT":
+      return action.payload;
+
     default:
       throw new Error("Unknown action type");
   }
+};
+
+const STORAGE_KEY = "characterLearner_userContent";
+const DEFAULT_CONTENT_NAME = "Words";
+
+const loadPersistedContent = (): ContentType[] => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved);
+    }
+  } catch (e) {
+    console.error("Failed to load from localStorage", e);
+  }
+  return [];
+};
+
+const parseCsvContent = (csvText: string, name: string): ContentType => {
+  const result = Papa.parse(csvText, { header: true, skipEmptyLines: true });
+  const content = (result.data as any[]).map((entry: any) =>
+    entry.Kanji === "" || entry.Kanji === undefined
+      ? { Kanji: entry.Kana, Kana: entry.Kana, Romaji: toRomaji(entry.Kana), English: entry.English }
+      : { Kanji: entry.Kanji, Kana: entry.Kana, Romaji: toRomaji(entry.Kana), English: entry.English }
+  );
+  return { name, content, selected: false, liked: false };
 };
 
 // write into these from backend with first render
@@ -99,7 +131,15 @@ function GlobalProvider({ children }: { children: ReactNode }) {
   const updateWriteMode = useCallback((writeMode: "Kanji" | "Kana" | "English") => setWriteMode(writeMode), []);
   const updateOrderMode = useCallback((orderMode: "Random" | "Shuffle") => setOrderMode(orderMode), []);
 
-  const [userContent, contentDispatch] = useReducer(userContentReducer, []);
+  const [userContent, contentDispatch] = useReducer(userContentReducer, [], (_initial) => {
+    const persisted = loadPersistedContent();
+    if (persisted.length > 0) {
+      return persisted;
+    }
+    // Auto-load Words.csv on first app open
+    const defaultContent = parseCsvContent(wordsCSV, DEFAULT_CONTENT_NAME);
+    return [defaultContent];
+  });
 
   const addContent = (content: ContentType) => {
     contentDispatch({ type: "ADD_CONTENT", payload: content });
@@ -117,9 +157,14 @@ function GlobalProvider({ children }: { children: ReactNode }) {
     contentDispatch({ type: "UPDATE_CONTENT", payload: content });
   };
 
+  // Persist userContent to localStorage whenever it changes
   useEffect(() => {
-
-  }, []);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(userContent));
+    } catch (e) {
+      console.error("Failed to save to localStorage", e);
+    }
+  }, [userContent]);
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
